@@ -1,8 +1,17 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Lexend', sans-serif;
+  background-color: blanchedalmond;
 }
 
 a {
   color: #00B7FF;
+}
+
+h4 {
+  color: slateblue;
+}
+
+img {
+  width: 150px;
 }

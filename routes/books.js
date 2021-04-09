@@ -2,12 +2,58 @@ var express = require('express');
 var router = express.Router();
 
 let books = [
-    {bookTitle: "Vi odlar smultron", author: "Sarah Vegna", about: "En bok om den lekfulla vardagen med ett litet barn!", pages: 32, rented: false, image: "vi-odlar-smultron.png", id: 1},
-    {bookTitle: "Vem är arg", author: "Stina Wirsén", about: "En liten bok om stora känslor. Om hur arg och ledsen man kan bli när man ska leka tillsammans. Och hur roligt man kan ha!", pages: 32, rented: false, image: "vem-ar-arg.png", id: 2},
-    {bookTitle: "Handbok för superhjältar - del 1: Handboken", author: "Agnes och Elias Våhlund", about: "Lisa måste bo hos sin mormor i några månader eftersom hennes mamma jobbar i en annan stad. Problemet är bara att Lisa vantrivs något fruktansvärt i sin nya skola. Killgänget retar henne konstant för hennes utstående öron, och varje kväll somnar Lisa med händerna tryckta mot öronen, för att de förhoppningsvis ska sluta stå ut så mycket. En dag när Lisa, i vanlig ordning, blir jagad av killgänget rymmer hon in på biblioteket. Där, längst ner på en hylla, står en bok som liksom lyser. Lisa dras till hyllan och får fram boken som har det besynnerliga namnet 'Handbok för superhjältar'. Märkligt nog är inte boken registrerad i bibliotekets system, och bibliotekarien viskar till Lisa att det nog är så att handboken helt enkelt ska följa med Lisa hem och stanna där. Och i det ögonblicket börjar Lisas resa mot att bli superhjälten Röda masken!", pages: 87, rented: false, image: "handbok-for-superhjaltar.png", id: 3},
-    {bookTitle: "En annan historia", author: "Lina Thomsgård", about: "Här får du lära känna mattesnillen, låtskrivare, politiker, rösträttskämpar, tennisstjärnor, husmödrar, författare, jägare, börshajar och barnmorskor som alla bidragit till att skapa världen i dag. Femtioen personer som du, genom att läsa denna bok, är med och för in i evigheten.", pages: 195, rented: false, image: "en-annan-historia.png", id: 4},
-    {bookTitle: "Invisible women", author: "Caroline Criado Perez", about: "Imagine a world where your phone is too big for your hand, your doctor prescribes a drug that is wrong for your body and in a car accident you are 47% more likely to be injured. If any of that sounds familiar, chances are you're a woman. From government policy and medical research, to technology, workplaces, and the media. Invisible Women reveals how in a world built for and by men we are systematically ignoring half of the population, often with disastrous consequences.", pages: 432, rented: false, image: "invisible-women.png", id: 5}
+    {
+        bookTitle: "Vi odlar smultron", 
+        author: "Sarah Vegna", 
+        about: "En bok om den lekfulla vardagen med ett litet barn!", 
+        pages: 32, 
+        rented: false, 
+        image: "vi-odlar-smultron.png", 
+        id: 1
+    },
+    {
+        bookTitle: "Vem är arg", 
+        author: "Stina Wirsén", 
+        about: "En liten bok om stora känslor. Om hur arg och ledsen man kan bli när man ska leka tillsammans. Och hur roligt man kan ha!", 
+        pages: 32, 
+        rented: false, 
+        image: "vem-ar-arg.png", 
+        id: 2
+    },
+    {
+        bookTitle: "Handbok för superhjältar - del 1: Handboken", 
+        author: "Agnes och Elias Våhlund", 
+        about: "Lisa måste bo hos sin mormor i några månader eftersom hennes mamma jobbar i en annan stad. Problemet är bara att Lisa vantrivs något fruktansvärt i sin nya skola. Killgänget retar henne konstant för hennes utstående öron, och varje kväll somnar Lisa med händerna tryckta mot öronen, för att de förhoppningsvis ska sluta stå ut så mycket. En dag när Lisa, i vanlig ordning, blir jagad av killgänget rymmer hon in på biblioteket. Där, längst ner på en hylla, står en bok som liksom lyser. Lisa dras till hyllan och får fram boken som har det besynnerliga namnet 'Handbok för superhjältar'. Märkligt nog är inte boken registrerad i bibliotekets system, och bibliotekarien viskar till Lisa att det nog är så att handboken helt enkelt ska följa med Lisa hem och stanna där. Och i det ögonblicket börjar Lisas resa mot att bli superhjälten Röda masken!", 
+        pages: 87, 
+        rented: false, 
+        image: "handbok-for-superhjaltar.png", 
+        id: 3
+    },
+    {
+        bookTitle: "En annan historia", 
+        author: "Lina Thomsgård", 
+        about: "Här får du lära känna mattesnillen, låtskrivare, politiker, rösträttskämpar, tennisstjärnor, husmödrar, författare, jägare, börshajar och barnmorskor som alla bidragit till att skapa världen i dag. Femtioen personer som du, genom att läsa denna bok, är med och för in i evigheten.", 
+        pages: 195, 
+        rented: false, 
+        image: "en-annan-historia.png", 
+        id: 4
+    },
+    {
+        bookTitle: "Invisible women", 
+        author: "Caroline Criado Perez", 
+        about: "Imagine a world where your phone is too big for your hand, your doctor prescribes a drug that is wrong for your body and in a car accident you are 47% more likely to be injured. If any of that sounds familiar, chances are you're a woman. From government policy and medical research, to technology, workplaces, and the media. Invisible Women reveals how in a world built for and by men we are systematically ignoring half of the population, often with disastrous consequences.", 
+        pages: 432, 
+        rented: false, 
+        image: "invisible-women.png", 
+        id: 5
+    }
 ];
+
+let htmlHead = 
+    `<link href="/stylesheets/style.css" rel="stylesheet" type="text/css"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">`
+;
 
 let borrowers = [];
 
@@ -15,22 +61,30 @@ let borrowers = [];
 /* GET books listing. */
 //denna router '/' är rooten och därför är innehållet i denna det som visas på startsidan
 router.get('/', function(req, res, next) {
-    let printBooks = '<h1>Bibliotek</h1>'
+    let printBooks = htmlHead + `<title>Library</title> <h1>Bibliotek</h1>`;
     
     for (book in books) {
         // console.log(books[book].bookTitle); Denna syns i integrated terminalen
 
         let bookTemplate = `
-        <article>
-            <h2><a href="/books/book/${books[book].bookTitle}">${books[book].bookTitle}</a></h2>
-            <p>${books[book].author} [<a href="/books/rent/${books[book].bookTitle}">${ (books[book].rented) ? "Utlånad" : "Låna"}]</a></p>
-        </article>`;
+            <article>
+                <ul>
+                    <li>
+                        <h2><a href="/books/book/${books[book].bookTitle}">${books[book].bookTitle}</a></h2>
+                        <p>
+                            ${books[book].author} 
+                            [<a href="/books/rent/${books[book].bookTitle}">${(books[book].rented) ? "Utlånad" : "Låna"}</a>]
+                        </p>
+                    </li>
+                </ul>
+            </article>`
+        ;
         //iffy/ IIFE: ${ (books[book].rented) ? "Utlånad" : "Låna"}
 
         printBooks += bookTemplate;
     };
 
-    printBooks += `</div><a href="/books/add">Lägg till ny bok</a></div>`;
+    printBooks += `</div><h2><a href="/books/add">Lägg till ny bok</a></h2></div>`;
 
     res.send(printBooks);
 });
@@ -53,12 +107,20 @@ router.get('/book/:id', function(req, res) {
     //showbook är den klickade boken. Innehållet i den kan du sen nå via ex. showbook.bootTitle
     // console.log("Visa booktiteln vi har klickat på", showBook.bookTitle);
 
-    res.send("<h3>" + showBook.bookTitle + "</h3>" + "<p>" + showBook.author + "</p><br>" + "<p>" +showBook.about+ "</p><br>");
+    let showBookTemplate = htmlHead + 
+        `<title>Library - ${showBook.bookTitle}</title> 
+        <h3>${showBook.bookTitle}</h3> 
+        <p>Av: ${showBook.author}</p><br> 
+        <img src="/images/${showBook.image}" alt="Visar bokomslaget för ${showBook.bookTitle}"><br><br>
+        <p>${showBook.about}</p><br> 
+        <button><a href="/books">Tillbaka</a></button>`
+    ;
+    res.send(showBookTemplate);
 });
 
 /* add new book */
 router.get('/add', function(req, res) {
-    let addNewBook = 
+    let addNewBook = htmlHead + 
         `<div>
             <h4>Lägg till en ny bok:</h4>
             <form action="/books/add" method="post">
@@ -99,7 +161,7 @@ router.get("/rent/:id", function(req, res) {
     showBook.rented = true;
 
     let rentBook = 
-        `<h4>Du vill låna: ${showBook.bookTitle}</h4>
+        htmlHead + `<h4>Du vill låna: ${showBook.bookTitle}</h4>
         <form action="/books/rent/:id" method="post">
             <div><input typ="text" name="name">Ditt namn</div> 
             <div><input typ="text" name="email">Din email</div> 
@@ -107,8 +169,10 @@ router.get("/rent/:id", function(req, res) {
         </form>
         `;
     res.send(rentBook); 
+    // res.send(showBookTitle)
 });
 
+//id är allt efter rent/ o du kan döpa id till något annat (går bara att göra för att variabeln är dynamisk efter /lend/ i roten)
 router.post("/rent/:id", function(req, res) {
         console.log(req.body);
     
