@@ -130,9 +130,3 @@ router.post("/rent/:id", function(req, res) {
 //Göra något med borrowers-listan
 
 module.exports = router;
-
-//Vad ska pushas till repot, ex:
-//allt i public
-//allt i routes
-//readme.md
-//app.js
