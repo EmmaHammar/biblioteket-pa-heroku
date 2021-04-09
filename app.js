@@ -19,4 +19,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/books', booksRouter);
 
+//FRÅGA: Varför görs detta i app.js och inte i books.js eller egen fil?  Detta kan göras i books.js men då måste vi ha XX före? 
+//visa mer info om specifik bok, genom att skicka parametern id
+// app.get('/books/:id', function(req, res) {
+//     let showBook = req.params.id;
+
+//     res.send("Visa info om bok nr: " + showBook);
+// })
+
 module.exports = app;
