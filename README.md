@@ -1,6 +1,6 @@
 # How to run the project
 1) npx express-generator --no-view 
-2) npm install
+2) npm install (alla dependencies)
 
 
 # Exercise
