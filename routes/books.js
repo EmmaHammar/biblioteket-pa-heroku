@@ -157,46 +157,53 @@ router.post('/add', function(req, res) {
     
 });
 
+/* rent a book */
+router.get("/rent/:id", function(req, res) {
+    let showBookTitle = req.params.id;
+    fs.readFile("books.json", function(err, data) {
+        if(err) {
+            console.log(err);
+        }
 
-// /* rent a book */
-// router.get("/rent/:id", function(req, res) {
-//     let showBookTitle = req.params.id;
-//     let showBook = books.find( ({bookTitle}) => bookTitle == showBookTitle);
+        let books = JSON.parse(data);
+        // console.log(books);
 
-//     showBook.rented = true;
+        let showBook = books.find( ({bookTitle}) => bookTitle == showBookTitle);
 
-//     let rentBook = 
-//         htmlHead + `<h4>Du vill låna: ${showBook.bookTitle}</h4>
-//         <form action="/books/rent/:id" method="post">
-//             <div><input typ="text" name="name">Ditt namn</div> 
-//             <div><input typ="text" name="email">Din email</div> 
-//             <div><button type="submit">Låna</button></div>
-//         </form>
-//         `;
-//     res.send(rentBook); 
-//     // res.send(showBookTitle)
-// });
+        showBook.rented = true;
+        // console.log(showBook);
+        
+        //ersätta showbook i books med uppdaterade showbook:
+        Object.assign(books, showBook);
+        // console.log(books);
 
-// //id är allt efter rent/ o du kan döpa id till något annat (går bara att göra för att variabeln är dynamisk efter /lend/ i roten)
-// router.post("/rent/:id", function(req, res) {
-//         console.log(req.body);
-    
-//         let newBorrower = 
-//         {
-//             name: req.body.name, 
-//             email: req.body.email, 
-//             bookTitle: req.body.bookTitle 
-//         };
-    
-//         borrowers.push(newBorrower);
+        fs.writeFile("books.json", JSON.stringify(books, null, 2), function(err) {
+            if (err) {
+                console.log(err);
+            };
 
-//         //Kolla så det funkar
-//         // res.send(borrowers);
-    
-//         //tillbaka till startsidan
-//         res.redirect("/books");
-// });
+        });
+
+        res.redirect("/books");
+    });
+
+});
+
 // //Göra något med borrowers-listan
+// let newBorrower = 
+        // {
+        //     name: req.body.name, 
+        //     email: req.body.email, 
+        //     bookTitle: req.body.bookTitle 
+        // };
+    
+        // borrowers.push(newBorrower);
+
+        // //Kolla så det funkar
+        // // res.send(borrowers);
+    
+        // //tillbaka till startsidan
+        // res.redirect("/books");
 
 
 module.exports = router;
