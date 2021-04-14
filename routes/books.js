@@ -1,3 +1,4 @@
+const { log } = require('console');
 var express = require('express');
 var router = express.Router();
 const fs = require("fs");
@@ -95,39 +96,66 @@ router.get('/book/:id', function(req, res) {
     });
 });
 
-// /* add new book */
-// router.get('/add', function(req, res) {
-//     let addNewBook = htmlHead + 
-//         `<div>
-//             <h4>Lägg till en ny bok:</h4>
-//             <form action="/books/add" method="post">
-//                 <div><input typ="text" name="bookTitle">Boktitel</div> 
-//                 <div><input typ="text" name="author">Författare</div> 
-//                 <div><input typ="text" name="about">Om boken</div> 
-//                 <div><input typ="text" name="pages">Antal sidor</div> 
-//                 <div><button type="submit">Spara</button></div>
-//             </form>
-//         </div>`;
+/* add new book */
+router.get('/add', function(req, res) {
 
-//     res.send(addNewBook);
-// });
+    //Printar ny bok-formuläret: 
+    let addNewBookTemplate = htmlHead + 
+        `<div>
+            <h4>Lägg till en ny bok:</h4>
+            <form action="/books/add" method="post">
+                <div><input typ="text" id="bookTitle" name="bookTitle">Boktitel</div> 
+                <div><input typ="text" name="author">Författare</div> 
+                <div><input typ="text" name="about">Om boken</div> 
+                <div><input typ="text" name="pages">Antal sidor</div> 
+                <div><button type="submit">Spara</button></div>
+            </form>
+        </div>`;
+    res.send(addNewBookTemplate);
+});
 
-// router.post('/add', function(req, res) {
-//     console.log(req.body);
+router.post('/add', function(req, res) {
+    console.log(req.body);
 
-//     let newBook = 
-//     {
-//         bookTitle: req.body.bookTitle, 
-//         author: req.body.author, 
-//         about: req.body.about, 
-//         pages: req.body.pages 
-//     };
+    //ÖPPNAR FILEN 
+    fs.readFile("books.json", function(err, data) {
+        if(err) {
+            console.log(err);
+        }
 
-//     books.push(newBook);
+        //HÄMTA(?) books.json-böckerna
+        let books = JSON.parse(data);
+        // console.log(books);
 
-//     //tillbaka till startsidan
-//     res.redirect("/books");
-// });
+        //SKAPA NY BOK
+        //lägga till id senare
+        let newBook = 
+            {
+                bookTitle: req.body.bookTitle, 
+                author: req.body.author, 
+                about: req.body.about, 
+                pages: req.body.pages,
+                rented: false 
+            };
+
+        //LÄGGER TILL NY BOK I BOOKS.JSON
+        books.push(newBook);
+
+
+        //SKRIVER ÖVER GAMLA BOOKS.JSON MED NYA BOOKS
+        fs.writeFile("books.json", JSON.stringify(books, null, 2), function(err) {
+            if (err) {
+              console.log(err);
+            }
+
+        });
+
+        //tillbaka till startsidan
+        res.redirect("/books");
+
+    });
+    
+});
 
 
 // /* rent a book */
