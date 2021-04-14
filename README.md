@@ -3,7 +3,15 @@
 2) npm install (alla dependencies)
 
 
-# Exercise
+# Excercise biblioteket på Heroku
+Fortsätt på övningen med biblioteket och bygg ut så att böckerna sparas i en .json fil på servern som du kan både läsa och uppdatara med nya böcker.
+
+Deploya sedan servern till Heroku!
+
+
+
+# Exercise böcker-med-express
+
 I den här övningen skall du starta en express installation.
 Nu skall du utveckla en monolit applikation, dvs serverside rendering där alla vyer skapas och genereras på express servern.
 
