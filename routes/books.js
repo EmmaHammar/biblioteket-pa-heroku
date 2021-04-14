@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
         }
 
         let books = JSON.parse(data);
-        console.log(books);
+        // console.log(books);
 
 
         for (book in books) {
@@ -63,27 +63,37 @@ router.get('/', function(req, res, next) {
 // /* GET more info about a book */
 // //FRÅGA: Varför görs detta i app.js och inte i books.js eller egen fil? Det går att göra i apps.get vs router.get men då behöver du ha med XX innan i något av det? 
 // //varför behövs bara /book/:id och ej /books/book/:id?
-// router.get('/book/:id', function(req, res) {
+router.get('/book/:id', function(req, res) {
 
-//     //(Kom ihåg: använder .params när det är query info + get. använder .body när det är post)
-//     let showBookTitle = req.params.id;
+    //(Kom ihåg: använder .params när det är query info + get. använder .body när det är post)
+    let showBookTitle = req.params.id;
 
-//     //hitta klickade boken i books-arrayen
-//     let showBook =  books.find( ({bookTitle}) => bookTitle == showBookTitle);
+    fs.readFile('books.json', function(err, data) {
 
-//     //showbook är den klickade boken. Innehållet i den kan du sen nå via ex. showbook.bootTitle
-//     // console.log("Visa booktiteln vi har klickat på", showBook.bookTitle);
+        if (err) {
+            console.log(err);
+        }
 
-//     let showBookTemplate = htmlHead + 
-//         `<title>Library - ${showBook.bookTitle}</title> 
-//         <h3>${showBook.bookTitle}</h3> 
-//         <p>Av: ${showBook.author}</p><br> 
-//         <img src="/images/${showBook.image}" alt="Visar bokomslaget för ${showBook.bookTitle}"><br><br>
-//         <p>${showBook.about}</p><br> 
-//         <button><a href="/books">Tillbaka</a></button>`
-//     ;
-//     res.send(showBookTemplate);
-// });
+        let books = JSON.parse(data);
+        console.log(books);
+    
+    //hitta klickade boken i books-arrayen
+    let showBook =  books.find( ({bookTitle}) => bookTitle == showBookTitle);
+
+    //showbook är den klickade boken. Innehållet i den kan du sen nå via ex. showbook.bootTitle
+    // console.log("Visa booktiteln vi har klickat på", showBook.bookTitle);
+
+    let showBookTemplate = htmlHead + 
+        `<title>Library - ${showBook.bookTitle}</title> 
+        <h3>${showBook.bookTitle}</h3> 
+        <p>Av: ${showBook.author}</p><br> 
+        <img src="/images/${showBook.image}" alt="Visar bokomslaget för ${showBook.bookTitle}"><br><br>
+        <p>${showBook.about}</p><br> 
+        <button><a href="/books">Tillbaka</a></button>`
+    ;
+    res.send(showBookTemplate);
+    });
+});
 
 // /* add new book */
 // router.get('/add', function(req, res) {
